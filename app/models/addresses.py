@@ -16,3 +16,4 @@ class Address(db.Model):
 # PascalCase: classes
 # camelCase
 # snake_case: variables, functions, 
+    orders = db.relationship("Order", backref="address", lazy=True)

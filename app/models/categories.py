@@ -14,3 +14,4 @@ class Category(db.Model):
 
 
     # New comment
+    # feat: complete database model for Category table
