@@ -9,7 +9,7 @@ class Product(db.Model):
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
-    sku = db.Column(db.String(100), nullable=False, unique=True)
+    sku = db.Column(db.String(100), nullable=False, unique=True, index=True)
     stock_quantity = db.Column(db.Integer, nullable=False, default=0)
     image_url = db.Column(db.String(255))
     created_at = db.Column(db.Datetime, default=datetime.utcnow)
@@ -17,4 +17,9 @@ class Product(db.Model):
 
     #Relationship
     order_items = db.relationship("OrderItems", backref="product", lazy=True)
-   
+    # One to many relationship
+    # One product can appear in many orders
+    # We can count number of orders containing this product (for statistical purpose)
+    # macbook = Product.get(1)
+    # orders_contain_macbook = macbook.order_items
+    

@@ -22,7 +22,9 @@ class User(db.Model):
 
     # Relationships
     addresses = db.relationship("Address", backref="user", lazy=True, cascade='all, delete-orphan')
-    # orders = 
     orders = db.relationship("Order", backref="user", lazy=True)
 
-    
+    # user = User.query.get(1)
+    # user_orders = user.orders  # Returns list of Order objects
+    # bidirectional relationship
+

@@ -7,4 +7,4 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price_per_unit = db.Column(db.Numeric(10, 2), nullable=False)
 
-    _table_args_ = (db.UniqueConstraint('order_id', 'product_id', name='uk_order_product'),)
+    __table_args__ = (db.UniqueConstraint('order_id', 'product_id', name='uk_order_product'),)

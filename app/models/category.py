@@ -10,8 +10,9 @@ class Category(db.Model):
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
-    products = db.relationship("Product", backref="product", lazy=True)
+    # allow query all products in a category
+    products = db.relationship("Product", backref="category", lazy=True)
 
-
-    # New comment
-    # feat: complete database model for Category table
+    # Example:
+    # meat = Category.query(1) -> get category with id 1 (meat)
+    # meat_products = meat.products
