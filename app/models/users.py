@@ -24,3 +24,5 @@ class User(db.Model):
     addresses = db.relationship("Address", backref="user", lazy=True, cascade='all, delete-orphan')
     # orders = 
     orders = db.relationship("Order", backref="user", lazy=True)
+
+    

@@ -14,3 +14,7 @@ class Product(db.Model):
     image_url = db.Column(db.String(255))
     created_at = db.Column(db.Datetime, default=datetime.utcnow)
     updated_at = db.Column(db.Datetime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    #Relationship
+    order_items = db.relationship("OrderItems", backref="product", lazy=True)
+   
