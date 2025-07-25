@@ -1,8 +1,8 @@
-from app import db
+from app.extensions import db
 from enum import Enum
 from datetime import datetime
 
-class Status(Enum):
+class PaymentStatus(Enum):
     PENDING = "pending"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -17,7 +17,7 @@ class Payment(db.Model):
     payment_method = db.Column(db.String(50), nullable=False)
     transaction_id = db.Column(db.String(255))
     amount = db.Column(db.Numeric(10, 2), nullable=False)
-    status = db.Column(db.Enum(Status), nullable=False, default=Status.PENDING)
+    status = db.Column(db.Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow)
 
 

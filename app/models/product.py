@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import db
+from app.extensions import db
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -12,8 +12,8 @@ class Product(db.Model):
     sku = db.Column(db.String(100), nullable=False, unique=True, index=True)
     stock_quantity = db.Column(db.Integer, nullable=False, default=0)
     image_url = db.Column(db.String(255))
-    created_at = db.Column(db.Datetime, default=datetime.utcnow)
-    updated_at = db.Column(db.Datetime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     #Relationship
     order_items = db.relationship("OrderItems", backref="product", lazy=True)
