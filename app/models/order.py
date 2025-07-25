@@ -3,16 +3,17 @@ from datetime import datetime
 from enum import Enum
 
 class OrderStatus(Enum):
-    PENDING = "pending"
-    PROCESSING = "processing"
-    SHIPPED = "shipped"
-    DELIVERED = "delivered"
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    SHIPPED = "SHIPPED"
+    DELIVERED = "DELIVERED"
+    CANCELLED = "CANCELLED"
 
 class Order(db.Model):
     __tablename__="orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     shipping_address_id = db.Column(db.Integer, db.ForeignKey("addresses.id"), nullable=False)
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)

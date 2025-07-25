@@ -7,9 +7,9 @@
 -- -------------------------------------------------------------
 
 -- Drop the database if it already exists to start fresh
-DROP DATABASE IF EXISTS ecommerce_db;
-CREATE DATABASE ecommerce_db;
-USE ecommerce_db;
+DROP DATABASE IF EXISTS `ecommerce_db`;
+CREATE DATABASE `ecommerce_db`;
+USE `ecommerce_db`;
 
 -- Table: users
 -- Stores customer and administrator information.
@@ -20,7 +20,7 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20),
-    role ENUM('customer', 'admin') NOT NULL DEFAULT 'customer',
+    role ENUM('CUSTOMER', 'ADMIN') NOT NULL DEFAULT 'CUSTOMER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -71,7 +71,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     shipping_address_id INT NOT NULL,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+    status ENUM("PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED") NOT NULL DEFAULT 'PENDING',
     total_amount DECIMAL(10, 2) NOT NULL,
     shipping_method VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT,
@@ -99,7 +99,7 @@ CREATE TABLE payments (
     payment_method VARCHAR(50) NOT NULL, -- e.g., 'credit_card', 'paypal'
     transaction_id VARCHAR(255), -- From payment gateway
     amount DECIMAL(10, 2) NOT NULL,
-    status ENUM('pending', 'completed', 'failed', 'refunded') NOT NULL DEFAULT 'pending',
+    status ENUM("PENDING", "COMPLETED", "FAILED", "REFUNDED") NOT NULL DEFAULT 'PENDING',
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );

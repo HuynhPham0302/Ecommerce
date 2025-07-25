@@ -16,7 +16,7 @@ class Product(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     #Relationship
-    order_items = db.relationship("OrderItems", backref="product", lazy=True)
+    order_items = db.relationship("OrderItem", backref="product", lazy=True)
     # One to many relationship
     # One product can appear in many orders
     # We can count number of orders containing this product (for statistical purpose)

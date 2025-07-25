@@ -3,10 +3,10 @@ from enum import Enum
 from datetime import datetime
 
 class PaymentStatus(Enum):
-    PENDING = "pending"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    REFUNDED = "refunded"
+    PENDING = "PENDING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    REFUNDED = "REFUNDED"
 
 
 class Payment(db.Model):

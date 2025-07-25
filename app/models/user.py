@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 class UserRole(Enum):
-    CUSTOMER = "customer"
-    ADMIN = "admin"
+    CUSTOMER = "CUSTOMER"
+    ADMIN = "ADMIN"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -17,7 +17,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20))
     role = db.Column(db.Enum(UserRole), nullable=False, default=UserRole.CUSTOMER)
-    create_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships

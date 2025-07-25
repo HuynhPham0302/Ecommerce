@@ -3,4 +3,7 @@
 run:
 	python3 application.py
 
-.PHONY: run
+seed:
+	python3 seed_db.py
+
+.PHONY: run seed
