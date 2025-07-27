@@ -24,3 +24,14 @@ class Order(db.Model):
     order_items = db.relationship("OrderItem", backref="order", lazy=True, cascade='all, delete-orphan')
     payments = db.relationship("Payment", backref="order", lazy=True, cascade='all, delete-orphan')
     shipping_address = db.relationship("Address", foreign_keys=[shipping_address_id])
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "shipping_address_id": self.shipping_address_id,
+            "order_date": self.order_date.isoformat() if self.order_date else None,
+            "status": self.status.value if self.status else None,
+            "total_amount": self.total_amount,
+            "shipping_method": self.shipping_method
+        }

@@ -20,5 +20,15 @@ class Payment(db.Model):
     status = db.Column(db.Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "order_id": self.order_id,
+            "payment_method": self.payment_method,
+            "transaction_id": self.transaction_id,
+            "amount": self.amount,
+            "status": self.status.value if self.status else None,
+            "payment_date": self.payment_date.isoformat() if self.payment_date else None
+        }
 
 

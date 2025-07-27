@@ -23,3 +23,16 @@ class Product(db.Model):
     # macbook = Product.get(1)
     # orders_contain_macbook = macbook.order_items
     
+    def serialize(self):
+        return {
+            "id": self.id,
+            "category_id": self.category_id,
+            "name": self.name,
+            "description": self.description,
+            "price": self.price,
+            "sku": self.sku,
+            "stock_quantity": self.stock_quantity,
+            "image_url": self.image_url,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None 
+        }
