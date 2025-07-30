@@ -15,3 +15,21 @@ def get_addresses():
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to get addresses: {e}", status_code=400, error_code=500)
+    
+@address_bp.route("/addresses/<int:address_id>", methods=["GET"])
+def get_address(address_id: int):
+    try: 
+        address = Address.query.get(address_id)
+
+        if not address:
+            return APIResponse.error(message="Address not found", status_code=400, error_code=404)
+        
+        address_data = address.serialize()
+
+        return APIResponse.success(
+            data=address_data,
+            message="Address retrieved successfully",
+            status_code=200
+        )
+    except Exception as e:
+        return APIResponse.error(message=f"Faild to retrieve address: {e}", status_code=400, error_code=404)

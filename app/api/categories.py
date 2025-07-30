@@ -15,3 +15,19 @@ def get_categories():
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to get categories: {e}", status_code=400, error_code=500)
+    
+@category_bp.route("/categories/<int:category_id>", methods=["GET"])
+def get_category(category_id: int):
+    try:
+        category = Category.query.get(category_id)
+        if not category:
+            return APIResponse.error(message="Category not found", status_code=400, error_code=404)
+        category_data = category.serialize()
+
+        return APIResponse.success(
+            data=category_data,
+            message="Category retrieved successfully",
+            status_code=200
+        )
+    except Exception as e:
+        return APIResponse.error(message=f"Failed to retrieve category: {e}", status_code=400, error_code=404)

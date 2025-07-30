@@ -7,7 +7,7 @@ payment_bp = Blueprint("payments", __name__)
 
 @payment_bp.route("/payments", methods=["GET"])
 # @admin_required
-def get_users():
+def get_payments():
     try:
         # from User select *
         query = Payment.query
@@ -19,3 +19,20 @@ def get_users():
 
     except Exception as e:
         return APIResponse.error(message=f"Failed to get payments: {e}", status_code=400, error_code=500)
+    
+@payment_bp.route("/payments/<int:payment_id>", methods=["GET"])
+def get_payment(payment_id:int):
+    try:
+        payment = Payment.query.get(payment_id)
+
+        if not payment:
+            return APIResponse.error(message="Payment not found", status_code=400, error_code=404)
+        payment_data = payment.serialize()
+
+        return APIResponse.success(
+            data=payment_data,
+            message="Payment retrieved successfully",
+            status_code=200
+        )
+    except Exception as e:
+        return APIResponse.error(message=f"Failed to retrieve payment: {e}", status_code=400, error_code=404)

@@ -15,3 +15,20 @@ def get_orders():
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to get orders: {e}", status_code=400, error_code=500)
+    
+
+@order_bp.route("/orders/<int:order_id>", methods=["GET"])
+def get_order(order_id: int):
+    try:
+        order = Order.query.get(order_id)
+        if not order:
+            return APIResponse.error(message="Order not found", status_code=400, error_code=404)
+        order_data = order.serialize()
+
+        return APIResponse.success(
+            data=order_data,
+            message="Order retrieved successfully",
+            status_code=200
+        )
+    except Exception as e:
+        return APIResponse.error(message=f"Failed to retrieve order: {e}", status_code=400, errpr_code=404)
