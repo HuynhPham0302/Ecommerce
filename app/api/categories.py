@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models.category import Category
 from app.utils.api_helpers import APIResponse
+from app.extensions import db
 
 category_bp = Blueprint("categories", __name__)
 
@@ -31,3 +32,29 @@ def get_category(category_id: int):
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to retrieve category: {e}", status_code=400, error_code=404)
+
+@category_bp.route("/categories", methods=["POST"])
+def create_category():
+    try:
+        data = request.json()
+
+        new_category = Category(
+            id=data["id"],
+            name=data["name"],
+            description=data["description"],
+            created_at=data["created_at"]
+        )
+
+        db.session.add(new_category)
+        db.session.commit()
+        return APIResponse.success(
+            data=new_category.serialize(),
+            message="Category created successfully",
+            status_code=201
+        )
+    except Exception as e:
+        return APIResponse.error(
+            message=f"Failed to create category: {e}",
+            status_code=400,
+            error_code=500
+        )
