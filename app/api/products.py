@@ -19,7 +19,10 @@ def get_products():
         )
 
     except Exception as e:
-        return APIResponse.error(message=f"Failed to get products: {e}", status_code=400, error_code=500)
+        return APIResponse.error(
+            message=f"Failed to get products: {e}", status_code=400, error_code=500
+        )
+
 
 @product_bp.route("/products/<int:product_id>", methods=["GET"])
 def get_product(product_id: int):
@@ -27,17 +30,20 @@ def get_product(product_id: int):
         product = Product.query.get(product_id)
 
         if not product:
-            return APIResponse.error(message="Product not found", status_code=400, error_code=404)
+            return APIResponse.error(
+                message="Product not found", status_code=400, error_code=404
+            )
         product_data = product.serialize()
 
         return APIResponse.success(
-            data=product_data,
-            message="Product retrieved successfully",
-            status_code=200
+            data=product_data, message="Product retrieved successfully", status_code=200
         )
     except Exception as e:
-        return APIResponse.error(message=f"Failed to retrieve product: {e}", status_code=400, error_code=500)
-    
+        return APIResponse.error(
+            message=f"Failed to retrieve product: {e}", status_code=400, error_code=500
+        )
+
+
 @product_bp.route("/products", methods=["POST"])
 def create_product():
     try:
@@ -45,8 +51,10 @@ def create_product():
 
         existing_product = Product.query.filter_by(name=data["name"]).first()
         if existing_product:
-            return APIResponse.error("Product already exists!!!")
-        
+            return APIResponse.error(
+                message="Product already exists!!!", status_code=400, error_code=500
+            )
+
         new_product = Product(
             category_id=data["category_id"],
             name=data["name"],
@@ -54,7 +62,7 @@ def create_product():
             price=data["price"],
             sku=data["sku"],
             stock_quantity=data["stock_quantity"],
-            image_url=data.get("image_url")
+            image_url=data.get("image_url"),
         )
 
         db.session.add(new_product)
@@ -62,11 +70,9 @@ def create_product():
         return APIResponse.success(
             data=new_product.serialize(),
             message="Product created successfully",
-            status_code=201
+            status_code=201,
         )
     except Exception as e:
         return APIResponse.error(
-            message=f"Failed to create product: {e}",
-            status_code=400,
-            error_code=500
+            message=f"Failed to create product: {e}", status_code=400, error_code=500
         )

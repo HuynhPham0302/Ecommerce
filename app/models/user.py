@@ -7,6 +7,7 @@ class UserRole(Enum):
     CUSTOMER = "CUSTOMER"
     ADMIN = "ADMIN"
 
+
 class User(db.Model):
     __tablename__ = "users"
 
@@ -18,10 +19,14 @@ class User(db.Model):
     phone_number = db.Column(db.String(20))
     role = db.Column(db.Enum(UserRole), nullable=False, default=UserRole.CUSTOMER)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
 
     # Relationships
-    addresses = db.relationship("Address", backref="user", lazy=True, cascade='all, delete-orphan')
+    addresses = db.relationship(
+        "Address", backref="user", lazy=True, cascade="all, delete-orphan"
+    )
     orders = db.relationship("Order", backref="user", lazy=True)
 
     # user = User.query.get(1)
@@ -30,12 +35,12 @@ class User(db.Model):
 
     def serialize(self):
         return {
-            'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'phone_number': self.phone_number,
-            'role': self.role.value if self.role else None,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "role": self.role.value if self.role else None,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }

@@ -22,7 +22,7 @@ def create_app():
             "version": "1.0.0",
             "endpoints": {
                 "api_base": "/api",
-            }
+            },
         }
-    
+
     return app

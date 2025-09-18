@@ -2,6 +2,7 @@ from app.extensions import db
 from enum import Enum
 from datetime import datetime
 
+
 class PaymentStatus(Enum):
     PENDING = "PENDING"
     COMPLETED = "COMPLETED"
@@ -17,7 +18,9 @@ class Payment(db.Model):
     payment_method = db.Column(db.String(50), nullable=False)
     transaction_id = db.Column(db.String(255))
     amount = db.Column(db.Numeric(10, 2), nullable=False)
-    status = db.Column(db.Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
+    status = db.Column(
+        db.Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING
+    )
     payment_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def serialize(self):
@@ -28,7 +31,7 @@ class Payment(db.Model):
             "transaction_id": self.transaction_id,
             "amount": self.amount,
             "status": self.status.value if self.status else None,
-            "payment_date": self.payment_date.isoformat() if self.payment_date else None
+            "payment_date": (
+                self.payment_date.isoformat() if self.payment_date else None
+            ),
         }
-
-
