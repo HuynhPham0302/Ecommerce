@@ -15,5 +15,8 @@ python-dotenv==1.0.0
 # Development and debugging
 Werkzeug==3.0.1
 
+# API Documentation
+flasgger==0.9.7.1
+
 # Utility packages (if needed for future development)
 requests==2.31.0

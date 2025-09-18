@@ -1,16 +1,42 @@
+from flasgger import Swagger
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-from .config import Config
-from .models import *
-from .extensions import db
 from .api import __all__ as blueprints
+from .config import Config
+from .extensions import db
+from .models import *
 
 
 def create_app():
     app = Flask(__name__)
 
     app.config.from_object(Config)
+
+    # Initialize Swagger/Flasgger
+    swagger_config = {
+        "headers": [],
+        "specs": [
+            {
+                "endpoint": "apispec_1",
+                "route": "/apispec_1.json",
+                "rule_filter": lambda rule: True,  # all in
+                "model_filter": lambda tag: True,  # all in
+            }
+        ],
+        "static_url_path": "/flasgger_static",
+        "swagger_ui": True,
+        "specs_route": "/docs/",
+        "title": "E-commerce API Documentation",
+        "version": "1.0.0",
+        "description": "RESTful API for E-commerce platform with authentication, products, orders, and payment management",
+        "contact": {
+            "name": "E-commerce API Support",
+            "url": "https://github.com/HuynhPham0302/Ecommerce",
+        },
+    }
+    swagger = Swagger(app, config=swagger_config)
+
     db.init_app(app)
     for bp in blueprints:
         app.register_blueprint(bp, url_prefix="/api")

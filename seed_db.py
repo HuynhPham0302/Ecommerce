@@ -5,23 +5,30 @@ Database Seeding Script for E-commerce Application
 This script populates the database with sample data for development and testing.
 """
 
-import sys
 import os
+import sys
 from datetime import datetime
 from decimal import Decimal
+
+import bcrypt
 
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath('.'))
 
 from app import create_app
 from app.extensions import db
-from app.models.user import User, UserRole
-from app.models.category import Category
-from app.models.product import Product
 from app.models.address import Address
+from app.models.category import Category
 from app.models.order import Order, OrderStatus
 from app.models.order_item import OrderItem
 from app.models.payment import Payment, PaymentStatus
+from app.models.product import Product
+from app.models.user import User, UserRole
+
+
+def hash_password(password: str) -> str:
+    """Generate bcrypt hash for a password"""
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
 def clear_database():
@@ -51,49 +58,52 @@ def clear_database():
 
 
 def seed_users():
-    """Create sample users"""
+    """Create sample users with properly hashed passwords"""
     print("Creating users...")
-    
+
+    # Default password for all seed users (can be different in production)
+    default_password = "password123"
+
     users = [
         User(
             first_name="John",
             last_name="Doe",
             email="john.doe@example.com",
-            password_hash="hashed_password_123",  # In real app, use proper hashing
+            password_hash=hash_password(default_password),
             phone_number="+1234567890",
-            role=UserRole.ADMIN
+            role=UserRole.ADMIN,
         ),
         User(
             first_name="Jane",
             last_name="Smith",
             email="jane.smith@example.com",
-            password_hash="hashed_password_456",
+            password_hash=hash_password(default_password),
             phone_number="+1234567891",
-            role=UserRole.CUSTOMER
+            role=UserRole.CUSTOMER,
         ),
         User(
             first_name="Alice",
             last_name="Johnson",
             email="alice.johnson@example.com",
-            password_hash="hashed_password_789",
+            password_hash=hash_password(default_password),
             phone_number="+1234567892",
-            role=UserRole.CUSTOMER
+            role=UserRole.CUSTOMER,
         ),
         User(
             first_name="Bob",
             last_name="Wilson",
             email="bob.wilson@example.com",
-            password_hash="hashed_password_101",
+            password_hash=hash_password(default_password),
             phone_number="+1234567893",
-            role=UserRole.CUSTOMER
-        )
+            role=UserRole.CUSTOMER,
+        ),
     ]
-    
+
     for user in users:
         db.session.add(user)
-    
+
     db.session.commit()
-    print(f"Created {len(users)} users")
+    print(f"Created {len(users)} users with password: '{default_password}'")
     return users
 
 
