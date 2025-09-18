@@ -18,7 +18,9 @@ def get_users():
         )
 
     except Exception as e:
-        return APIResponse.error(message=f"Failed to get users: {e}", status_code=400, error_code=500)
+        return APIResponse.error(
+            message=f"Failed to get users: {e}", status_code=400, error_code=500
+        )
 
 
 @user_bp.route("/users/<int:user_id>", methods=["GET"])

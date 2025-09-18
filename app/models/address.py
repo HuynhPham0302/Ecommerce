@@ -25,5 +25,5 @@ class Address(db.Model):
             "city": self.city,
             "state_province_region": self.state_province_region,
             "postal_code": self.postal_code,
-            "country": self.country
+            "country": self.country,
         }
