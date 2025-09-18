@@ -1,0 +1,19 @@
+# Core Flask and web framework dependencies
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+
+# Database drivers
+PyMySQL==1.1.0
+
+# Authentication and security
+bcrypt==4.1.2
+PyJWT==2.8.0
+
+# Environment management
+python-dotenv==1.0.0
+
+# Development and debugging
+Werkzeug==3.0.1
+
+# Utility packages (if needed for future development)
+requests==2.31.0
