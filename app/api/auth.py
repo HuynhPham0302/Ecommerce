@@ -1,17 +1,17 @@
 import datetime
-from flask import Blueprint, current_app, request
 
-from app.models.user import User, UserRole
-from app.utils.api_helpers import APIResponse
-from app.extensions import db
 import bcrypt
 import jwt
+from flask import Blueprint, current_app, request
 
-
+from app.extensions import db
+from app.models.user import User, UserRole
+from app.utils.api_helpers import APIResponse
 
 auth_bp = Blueprint("auth", __name__)
 
-@auth_bp.route("/resigter", methods=["POST"])
+
+@auth_bp.route("/auth/register", methods=["POST"])
 def register():
     """
     Register a new user
@@ -26,13 +26,12 @@ def register():
     }
     """
     try:
-        data = request.json()
+        data = request.get_json()
 
         exsisting_user = User.query.filter_by(email=data["email"]).first()
         if exsisting_user:
-            APIResponse.error("User with this email already exists", 409)
+            return APIResponse.error("User with this email already exists", 409)
 
-        
         hashed_password = bcrypt.hashpw(
             data["password"].encode("utf-8"),
             bcrypt.gensalt()
@@ -53,10 +52,10 @@ def register():
         token = jwt.encode(
             {
                 "user_id": user.id,
-                "exp": datetime.utcnow() + datetime.timedelta(minutes=30)
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
             },
             current_app.config["SECRET_KEY"],
-            algorithm='HS256'
+            algorithm="HS256",
         )
         return APIResponse.success(
             {
@@ -72,7 +71,7 @@ def register():
         return APIResponse.error(f"Registration failed: {str(e)}", 500)
 
 
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route("/auth/login", methods=["POST"])
 def login():
     """
     Login user
@@ -85,7 +84,7 @@ def login():
     """
 
     try:
-        data = request.json()
+        data = request.get_json()
         user = User.query.filter_by(email=data["email"]).first()
 
         if not user:
@@ -98,10 +97,10 @@ def login():
         token = jwt.encode(
             {
                 "user_id": user.id,
-                "exp": datetime.utcnow() + datetime.timedelta(minutes=30)
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
             },
             current_app.config["SECRET_KEY"],
-            algorithm='HS256'
+            algorithm="HS256",
         )
 
         return APIResponse.success(
@@ -113,4 +112,3 @@ def login():
         )
     except Exception as e:
         return APIResponse.error(f"Login failed: {str(e)}", 500)
-        

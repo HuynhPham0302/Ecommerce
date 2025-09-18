@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
+
+from app.extensions import db
 from app.models.order import Order
 from app.utils.api_helpers import APIResponse
-from app.extensions import db
 
 order_bp = Blueprint("orders", __name__)
 
@@ -37,16 +38,15 @@ def get_order(order_id: int):
 @order_bp.route("/orders", methods=["POST"])
 def create_order():
     try:
-        data = request.json()
+        data = request.get_json()
 
         new_order = Order(
-            id= data["id"],
-            user_id= data["user_id"],
-            shipping_address_id= data["shipping_address_id"],
-            order_date= data["order_data"],
-            status= data["status"],
-            total_amount= data["total_amount"],
-            shipping_method= data["shipping_method"]
+            user_id=data["user_id"],
+            shipping_address_id=data["shipping_address_id"],
+            order_date=data["order_date"],
+            status=data["status"],
+            total_amount=data["total_amount"],
+            shipping_method=data["shipping_method"]
         )
 
         db.session.add(new_order)

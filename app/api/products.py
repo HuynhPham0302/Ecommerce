@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
+
+from app.extensions import db
 from app.models.product import Product
 from app.utils.api_helpers import APIResponse
-from app.extensions import db
 
 product_bp = Blueprint("products", __name__)
 
@@ -37,16 +38,16 @@ def get_product(product_id: int):
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to retrieve product: {e}", status_code=400, error_code=500)
-    
+
 @product_bp.route("/products", methods=["POST"])
 def create_product():
     try:
-        data = request.json()
+        data = request.get_json()
 
         existing_product = Product.query.filter_by(name=data["name"]).first()
         if existing_product:
             return APIResponse.error("Product already exists!!!")
-        
+
         new_product = Product(
             category_id=data["category_id"],
             name=data["name"],

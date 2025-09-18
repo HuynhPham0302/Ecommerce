@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
+
+from app.extensions import db
 from app.models.order_item import OrderItem
 from app.utils.api_helpers import APIResponse
-from app.extensions import db
 
 orderitem_bp = Blueprint("order_items", __name__)
 
@@ -17,7 +18,7 @@ def get_order_items():
     
     except Exception as e:
         return APIResponse.error(message=f"Failed to get OrderItem: {e}", status_code=400, error_code=500)
-    
+
 @orderitem_bp.route("/order_items/<int:order_item_id>", methods=["GET"])
 def get_order_item(order_item_id: int):
     try:
@@ -39,14 +40,13 @@ def get_order_item(order_item_id: int):
 @orderitem_bp.route("/order_items", methods=["POST"])
 def create_order_item():
     try:
-        data = request.json()
+        data = request.get_json()
 
         new_order_item = OrderItem(
-            id=data["id"],
             order_id=data["order_id"],
             product_id=data["product_id"],
             quantity=data["quantity"],
-            price_per_unit=data["price_per_unit"]
+            price_per_unit=data["price_per_unit"],
         )
 
         db.session.add(new_order_item)

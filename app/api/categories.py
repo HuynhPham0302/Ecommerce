@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
+
+from app.extensions import db
 from app.models.category import Category
 from app.utils.api_helpers import APIResponse
-from app.extensions import db
 
 category_bp = Blueprint("categories", __name__)
 
@@ -16,7 +17,7 @@ def get_categories():
         )
     except Exception as e:
         return APIResponse.error(message=f"Failed to get categories: {e}", status_code=400, error_code=500)
-    
+
 @category_bp.route("/categories/<int:category_id>", methods=["GET"])
 def get_category(category_id: int):
     try:
@@ -36,14 +37,9 @@ def get_category(category_id: int):
 @category_bp.route("/categories", methods=["POST"])
 def create_category():
     try:
-        data = request.json()
+        data = request.get_json()
 
-        new_category = Category(
-            id=data["id"],
-            name=data["name"],
-            description=data["description"],
-            created_at=data["created_at"]
-        )
+        new_category = Category(name=data["name"], description=data["description"])
 
         db.session.add(new_category)
         db.session.commit()
