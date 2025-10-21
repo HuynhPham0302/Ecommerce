@@ -3,6 +3,12 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from .api import __all__ as blueprints
+from flasgger import Swagger
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+from .api import __all__ as api_blueprints
+from .client import __all__ as client_blueprints
 from .config import Config
 from .extensions import db
 from .models import *
@@ -37,9 +43,16 @@ def create_app():
     }
     swagger = Swagger(app, config=swagger_config)
 
+    # Initialize database
     db.init_app(app)
-    for bp in blueprints:
+
+    # Register API blueprints
+    for bp in api_blueprints:
         app.register_blueprint(bp, url_prefix="/api")
+
+    # Register client blueprints
+    for bp in client_blueprints:
+        app.register_blueprint(bp, url_prefix="/")
 
     @app.route("/")
     def index():
