@@ -1,15 +1,12 @@
-<<<<<<< Updated upstream
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-=======
 from flasgger import Swagger
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 from .api import __all__ as api_blueprints
 from .client import __all__ as client_blueprints
->>>>>>> Stashed changes
 from .config import Config
 from .models import *
 from .extensions import db
@@ -20,8 +17,6 @@ def create_app():
     app = Flask(__name__)
 
     app.config.from_object(Config)
-<<<<<<< Updated upstream
-=======
 
     # Initialize Swagger/Flasgger
     swagger_config = {
@@ -48,7 +43,6 @@ def create_app():
     swagger = Swagger(app, config=swagger_config)
 
     # Initialize database
->>>>>>> Stashed changes
     db.init_app(app)
 
     # Register API blueprints
