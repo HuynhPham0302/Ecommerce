@@ -1,6 +1,8 @@
+from flasgger import Swagger
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
+from .api import __all__ as blueprints
 from flasgger import Swagger
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -8,9 +10,8 @@ from flask_sqlalchemy import SQLAlchemy
 from .api import __all__ as api_blueprints
 from .client import __all__ as client_blueprints
 from .config import Config
-from .models import *
 from .extensions import db
-from .api import __all__ as blueprints
+from .models import *
 
 
 def create_app():

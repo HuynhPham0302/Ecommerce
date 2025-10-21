@@ -2,6 +2,7 @@ import datetime
 
 import bcrypt
 import jwt
+from flasgger import swag_from
 from flask import Blueprint, current_app, request
 
 from app.extensions import db
@@ -15,15 +16,39 @@ auth_bp = Blueprint("auth", __name__)
 def register():
     """
     Register a new user
-    
-    Request JSON:
-    {
-        "first_name": "John",
-        "last_name": "Doe", 
-        "email": "john@example.com",
-        "password": "password123",
-        "phone_number": "+1234567890" (optional)
-    }
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - in: body
+        name: user_data
+        required: true
+        schema:
+          type: object
+          required: [first_name, last_name, email, password]
+          properties:
+            first_name:
+              type: string
+              example: "John"
+            last_name:
+              type: string
+              example: "Doe"
+            email:
+              type: string
+              example: "john.doe@example.com"
+            password:
+              type: string
+              example: "password123"
+            phone_number:
+              type: string
+              example: "+1234567890"
+    responses:
+      201:
+        description: User registered successfully
+      409:
+        description: User already exists
+      500:
+        description: Registration failed
     """
     try:
         data = request.get_json()
@@ -75,12 +100,30 @@ def register():
 def login():
     """
     Login user
-    
-    Request JSON:
-    {
-        "email": "john@example.com",
-        "password": "password123"
-    }
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - in: body
+        name: login_data
+        required: true
+        schema:
+          type: object
+          required: [email, password]
+          properties:
+            email:
+              type: string
+              example: "john.doe@example.com"
+            password:
+              type: string
+              example: "password123"
+    responses:
+      200:
+        description: Login successful
+      401:
+        description: Invalid credentials
+      500:
+        description: Login failed
     """
 
     try:
@@ -90,6 +133,7 @@ def login():
         if not user:
             return APIResponse.error("Invalid email or password.", 401)
 
+        # Convert stored password hash back to bytes for bcrypt comparison
         if not bcrypt.checkpw(data["password"].encode("utf-8"), user.password_hash.encode("utf-8")):
             return APIResponse.error("Invalid email or password", 401)
 
